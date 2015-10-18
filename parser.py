@@ -43,8 +43,12 @@ class Parser():
         for combinatie in self.zenderdict]
         
         ## Parser instantiëren en de te verwachten argumenten meegeven
-        self.parser = argparse.ArgumentParser(usage=self.helpoutput(), add_help=False)
-        self.parser.add_argument('zender', choices=self.afkortingenlijst, help="hulp hier")
+        self.parser = argparse.ArgumentParser(prog="libre-yamlradio")#(usage="jooo")#(usage=self.helpoutput(), add_help=False)
+        self.parser.add_argument('zender', metavar="ZENDER",choices=self.afkortingenlijst, help="hulp hier")
+        
+        group = self.parser.add_argument_group('communicator arguments').add_mutually_exclusive_group()
+        group.add_argument("-t","--plaintext", help="plain output",action="store_true")
+        group.add_argument("-c","--color", help="colored output",action="store_true")
         
     def zendervinden(self):
         ## De ingevoerde argumenten parsen
