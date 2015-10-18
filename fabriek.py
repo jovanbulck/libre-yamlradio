@@ -40,10 +40,10 @@ class Fabriek():
         exit()
         """
         try:
-            co = importlib.import_module(".communicators.%s" % comm, \
+            co = importlib.import_module("communicators.%s" % comm, \
             package="yamlradio").Communicator()
         except ImportError:
-            co = importlib.import_module(".communicators.default", \
+            co = importlib.import_module("communicators.default", \
             package="yamlradio").Communicator()
         return co
         

@@ -1,4 +1,0 @@
-include yamlradio/zenders.yml
-include yamlradio/communicators/*.py
-global-exclude *pyc
-
