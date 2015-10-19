@@ -5,7 +5,7 @@ yamlparser.py       interface to the yaml config file:
                         dump_zenders()
 radio.py            media player:
                         play(channelname, url, co)
-fabriek.py          create a communicator obj:
+fabriek.py          create a [decorated] communicator obj:
                         creat_raw(abrv)
                         creat_text(abrv)
                         creat_color(abrv)
@@ -13,5 +13,11 @@ communicators       visualisation interface:
                         now_playing(channelname, url)
                         display_err(str)
                         display_icy(str)
-icy_parsers         providing channel-spec meaning to the icy str:
-                        parse_icy(str):{(SONG,artist,title),(SHOW,title),(SLOGAN,slogan)}
+                    additional methods to be used by decorators:
+                        display_song(artist, title)
+                        display_show(title)
+                        display_slogan(slogan)
+icy_parsers         providing channel-spec meaning to the icy str
+                    via a DECORATED COMMUNICATOR:
+                        diplay_icy(str): first parse channel-spec and call
+                            finer grained comm method if possible
