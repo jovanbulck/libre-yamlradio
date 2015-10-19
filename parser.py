@@ -43,12 +43,25 @@ class Parser():
         for combinatie in self.zenderdict]
         
         ## Parser instantiëren en de te verwachten argumenten meegeven
-        self.parser = argparse.ArgumentParser(prog="libre-yamlradio")#(usage="jooo")#(usage=self.helpoutput(), add_help=False)
-        self.parser.add_argument('zender', metavar="ZENDER",choices=self.afkortingenlijst, help="hulp hier")
+        self.parser = argparse.ArgumentParser(prog="libre-yamlradio.py",
+                formatter_class=argparse.RawTextHelpFormatter,
+#                usage="joo",
+                description="Python script to play various radio stations from a terminal:\n\n",
+                epilog="This program is free software, and you are welcome to redistribute it under the \n" + 
+                "condititions of the CC-BY-SA license. Try 'libre-yamlradio --license' for more info."
+                )      
+        #,usage=self.helpoutput())#(usage="jooo")#(usage=self.helpoutput(), add_help=False)
+        self.parser.add_argument('zender', metavar="CHANNEL",choices=self.afkortingenlijst,
+            help="one of the following radio channel abbreviations:\n" + self.dump_channels())
+        
+        self.parser.add_argument("-v", "--version", action="store_true", help="show version number and exit")
+        self.parser.add_argument("-l", "--license", action="store_true", help="show license info and exit")
+        self.parser.add_argument("--yaml-path", action="store_true", help="path to a custom yaml config file")
         
         group = self.parser.add_argument_group('communicator arguments').add_mutually_exclusive_group()
-        group.add_argument("-t","--plaintext", help="plain output",action="store_true")
-        group.add_argument("-c","--color", help="colored output",action="store_true")
+        group.add_argument("-r", "--raw", help="dump raw ICY info", action="store_true")
+        group.add_argument("-t","--plaintext", help="show non-formatted (fine-grained) ICY info", action="store_true")
+        group.add_argument("-c","--color", help="show formatted (fine-grained) ICY info", action="store_true")
         
     def zendervinden(self):
         ## De ingevoerde argumenten parsen
@@ -66,27 +79,16 @@ class Parser():
                     
         return (naam, url, comm)    
     
-    def helpoutput(self, name=None):
-        ## We schrijven een eigen helpoutput, omdat die van argparse hier niet
-        ## volstaat. De reden:
-        ## We willen dat gebruikers "rd 3fm" kunnen schrijven ipv bvb
-        ## "rd --3fm";
-        ## De afwezigheid van streepjes impliceert een positioneel argument,
-        ## ipv een optioneel argument;
-        ## Daarom moeten we werken met één argument, genaamd "zender", welke
-        ## meerdere keuzes heeft (de lijst van zenders);
-        ## Dat leidt tot een kleine helpoutput, iets als "rd zender {}" met
-        ## tussen de accolades alle mogelijke zenderafkortingen.
+    def dump_channels(self, name=None):
         SPACING = 2
-        
-        text = "rd [channel_abbreviation]\n" + \
-        "available channels:\n"
-        abbreviation_column_width = max([len(afk) for afk in self.afkortingenlijst]) + SPACING
+        INDENT = 1
+        text=""
+        abrv_col_width = max([len(afk) for afk in self.afkortingenlijst]) + SPACING
         
         for c in self.afkortingenennamenlijst:
-            text += ("  " + \
+            text += (INDENT * " " + \
             c[0] + \
-            ((abbreviation_column_width - len(c[0])) * " " ) + \
+            ((abrv_col_width - len(c[0])) * " " ) + \
             c[1] + \
             "\n")
         return text

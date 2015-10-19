@@ -1,0 +1,17 @@
+yamlradio.py        front-end, including argparse
+yamlparser.py       interface to the yaml config file:
+                        load(optional_filepath)
+                        lookup_url(abrv)
+                        dump_zenders()
+radio.py            media player:
+                        play(channelname, url, co)
+fabriek.py          create a communicator obj:
+                        creat_raw(abrv)
+                        creat_text(abrv)
+                        creat_color(abrv)
+communicators       visualisation interface:
+                        now_playing(channelname, url)
+                        display_err(str)
+                        display_icy(str)
+icy_parsers         providing channel-spec meaning to the icy str:
+                        parse_icy(str):{(SONG,artist,title),(SHOW,title),(SLOGAN,slogan)}
